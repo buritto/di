@@ -11,7 +11,6 @@ namespace TagCloud
     {
         public List<Size> GetSizeWords(List<Tuple<string, int>> wordsAndCounts, int widthWindow, int heightWindow)
         {
-            var sizes = new List<Size>(wordsAndCounts.Count);
             var countWords = wordsAndCounts.Count; 
             var countAllWords = wordsAndCounts.Sum(tuple => tuple.Item2);
             return wordsAndCounts.Select(tuple => new Size(

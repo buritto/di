@@ -6,6 +6,11 @@ namespace TagCloud
     {
         private readonly HashSet<string> boringWords;
 
+        public ContentConfigurator()
+        {
+            boringWords = new HashSet<string>();
+        }
+
         public ContentConfigurator(HashSet<string> boringWords)
         {
             this.boringWords = boringWords;
@@ -15,6 +20,11 @@ namespace TagCloud
         {
             boringWords.Add(word);
             return this;
+        }
+
+        public bool ValidWord(string word)
+        {
+            return !boringWords.Contains(word);
         }
     }
 }

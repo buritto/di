@@ -9,6 +9,6 @@ namespace TagCloud
 {
     interface IArchitect
     {
-        List<Size> GetSizeWords(List<Tuple<string, int>> wordsAndCounts, int heightWindow, int widthWindow);
+        List<Size> GetSizeWords(List<Tuple<string, int>> wordsAndCounts, int widthWindow, int heightWindow);
     }
 }

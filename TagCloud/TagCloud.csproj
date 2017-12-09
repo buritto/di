@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchitectDecreasingSpiral.cs" />
+    <Compile Include="CircularCloudLayouter.cs" />
     <Compile Include="ContentConfigurator.cs" />
     <Compile Include="DefaultPainterWords.cs" />
     <Compile Include="IArchitect.cs" />
