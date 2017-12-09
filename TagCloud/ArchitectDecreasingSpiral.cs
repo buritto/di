@@ -18,9 +18,10 @@ namespace TagCloud
                 GetSide(tuple.Item2, countAllWords, heightWindow, countWords))).ToList();
         }
 
-        private int GetSide(int countWord, int countAllWords, int widthWindow, int countDifferentWords)
+        private int GetSide(double countWord, double countAllWords, double sideWindow, double countDifferentWords)
         {
-            return (countWord / countAllWords) * (widthWindow / countDifferentWords);
+            var res = (int)((countWord / countAllWords) * (sideWindow / countDifferentWords));
+            return (int)((countWord / countAllWords) * 50 * (sideWindow / countDifferentWords));
         }
     }
 }

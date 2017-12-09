@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace TagCloud
 {
@@ -11,7 +12,7 @@ namespace TagCloud
 
         public Font GetFontWord(string word, Size rectangleForWord)
         {
-            return  new Font(FontFamily.GenericSansSerif, 12);
+            return  new Font(FontFamily.GenericSansSerif, (float)rectangleForWord.Width / word.Length);
         }
         
     }

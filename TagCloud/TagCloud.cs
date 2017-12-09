@@ -28,17 +28,12 @@ namespace TagCloud
         public void PaintTagCloud(string fileTestName, string pictureResultName)
         {
             var words = reader.GetFileData(fileTestName);
-            words.Sort((t1, t2) => t1.Item2.CompareTo(t2.Item2));
+            words.Sort((t1, t2) => t2.Item2.CompareTo(t1.Item2));
             words = words.Where(tuple => contentConfigurator.ValidWord(tuple.Item1)).ToList();
             var sizeReactangleForWords =
                 architect.GetSizeWords(words, pictureConfigurator.Width, pictureConfigurator.Height);
-            var rectangles = new List<Rectangle>();
-            foreach (var size in sizeReactangleForWords)
-            {
-                rectangles.Add(layout.PutNextRectangle(size));
-            }
+            var rectangles = GetRectangles(sizeReactangleForWords);
             var allWords = words.Select(tuple => tuple.Item1).ToList();
-
             var picture = new Bitmap(pictureConfigurator.Width, pictureConfigurator.Height);
             using (Graphics g = Graphics.FromImage(picture))
             {
@@ -57,6 +52,16 @@ namespace TagCloud
                 picture.Save(pictureResultName);
             }
 
+        }
+
+        private List<Rectangle> GetRectangles(List<Size> sizeReactangleForWords)
+        {
+            var rectangles = new List<Rectangle>();
+            foreach (var size in sizeReactangleForWords)
+            {
+                rectangles.Add(layout.PutNextRectangle(size));
+            }
+            return rectangles;
         }
     }
 }
