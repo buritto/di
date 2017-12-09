@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TagCloud
 {
     interface IFormatReader
     {
-        List<string> GetFileData(string fileName);
+        List<Tuple<string, int>> GetFileData(string fileName);
     }
 }

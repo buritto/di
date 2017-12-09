@@ -50,6 +50,7 @@
     <Compile Include="PictureConfigurator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TagCloud.cs" />
     <Compile Include="TxtReader.cs" />
   </ItemGroup>
   <ItemGroup>
