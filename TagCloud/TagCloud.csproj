@@ -43,8 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchitectDecreasingSpiral.cs" />
     <Compile Include="ContentConfigurator.cs" />
     <Compile Include="DefaultPainterWords.cs" />
+    <Compile Include="IArchitect.cs" />
     <Compile Include="IFormatReader.cs" />
     <Compile Include="IWordPainter.cs" />
     <Compile Include="PictureConfigurator.cs" />
