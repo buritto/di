@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TagCloud
 {
@@ -15,13 +13,12 @@ namespace TagCloud
             var countAllWords = wordsAndCounts.Sum(tuple => tuple.Item2);
             return wordsAndCounts.Select(tuple => new Size(
                 GetSide(tuple.Item2, countAllWords, widthWindow, countWords),
-                GetSide(tuple.Item2, countAllWords, heightWindow, countWords))).ToList();
+                GetSide(tuple.Item2, countAllWords, heightWindow, countWords, tuple.Item1.Length))).ToList();
         }
 
-        private int GetSide(double countWord, double countAllWords, double sideWindow, double countDifferentWords)
+        private int GetSide(double countWord, double countAllWords, double sideWindow, double countDifferentWords, int wordLength = 1)
         {
-            var res = (int)((countWord / countAllWords) * (sideWindow / countDifferentWords));
-            return (int)((countWord / countAllWords) * 50 * (sideWindow / countDifferentWords));
+            return (int)(countWord * sideWindow / (countDifferentWords));
         }
     }
 }

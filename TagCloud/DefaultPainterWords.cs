@@ -1,19 +1,17 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace TagCloud
 {
-    class DefaultPainterWords : IWordPainter
+    internal class DefaultPainterWords : IWordPainter
     {
         public Color GetColorWord(string word, Size rectangleForWord)
         {
-            return Color.Black;
+            return Color.Red;
         }
 
         public Font GetFontWord(string word, Size rectangleForWord)
         {
-            return  new Font(FontFamily.GenericSansSerif, (float)rectangleForWord.Width / word.Length);
+            return new Font(FontFamily.GenericSansSerif, rectangleForWord.Height / word.Length + 1);
         }
-        
     }
 }

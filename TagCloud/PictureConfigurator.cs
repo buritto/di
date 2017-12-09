@@ -1,23 +1,16 @@
-﻿using System.Drawing;
-using System.Drawing.Imaging;
-
-namespace TagCloud
+﻿namespace TagCloud
 {
     class PictureConfigurator
     {
         public int Height { get; }
         public  int Width { get; }
         public IWordPainter Painter;
-        public ImageFormat Format;
-        public Font TextFont { get; }
 
 
-        public PictureConfigurator(int width, int height, ImageFormat format)
+        public PictureConfigurator(int width, int height)
         {
             Width = width;
             Height = height;
-            this.Width = width;
-            Format = format;
             Painter = new DefaultPainterWords();
         }
 

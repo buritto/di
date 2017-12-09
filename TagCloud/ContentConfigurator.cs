@@ -5,6 +5,7 @@ namespace TagCloud
     class ContentConfigurator
     {
         private readonly HashSet<string> boringWords;
+        private int minLenght;
 
         public ContentConfigurator()
         {
@@ -22,9 +23,17 @@ namespace TagCloud
             return this;
         }
 
+
+        public ContentConfigurator SetMinCountSymbolInWord(int lenght)
+        {
+            minLenght = lenght;
+            return this;
+        }
+
         public bool ValidWord(string word)
         {
-            return !boringWords.Contains(word);
+            return !boringWords.Contains(word) && word.Length >= minLenght;
         }
+
     }
 }

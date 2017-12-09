@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace TagCloud
 {
@@ -27,9 +27,9 @@ namespace TagCloud
 
         public void PaintTagCloud(string fileTestName, string pictureResultName)
         {
-            var words = reader.GetFileData(fileTestName);
-            words.Sort((t1, t2) => t2.Item2.CompareTo(t1.Item2));
-            words = words.Where(tuple => contentConfigurator.ValidWord(tuple.Item1)).ToList();
+            var wordsAndCount = reader.GetFileData(fileTestName);
+            wordsAndCount.Sort((t1, t2) => t2.Item2.CompareTo(t1.Item2));
+            var words = wordsAndCount.Where(tuple => contentConfigurator.ValidWord(tuple.Item1)).ToList();
             var sizeReactangleForWords =
                 architect.GetSizeWords(words, pictureConfigurator.Width, pictureConfigurator.Height);
             var rectangles = GetRectangles(sizeReactangleForWords);
@@ -44,22 +44,30 @@ namespace TagCloud
                     var fontForWord = pictureConfigurator.Painter.GetFontWord(word, sizeReactangleForWords[i]);
                     g.DrawString(
                         word,
-                        fontForWord,
-                        new SolidBrush(colorForWord), 
+                        fontForWord, 
+                        new SolidBrush(colorForWord),
                         rectangles[i]
                         );
+                    g.DrawRectangle(new Pen(Color.Black), rectangles[i]);
                 }
                 picture.Save(pictureResultName);
             }
-
         }
 
         private List<Rectangle> GetRectangles(List<Size> sizeReactangleForWords)
         {
             var rectangles = new List<Rectangle>();
-            foreach (var size in sizeReactangleForWords)
+            try
             {
-                rectangles.Add(layout.PutNextRectangle(size));
+
+                foreach (var size in sizeReactangleForWords)
+                {
+                    rectangles.Add(layout.PutNextRectangle(size));
+                }
+            }
+            catch (Exception e)
+            {
+                // ignored
             }
             return rectangles;
         }
