@@ -4,7 +4,7 @@ namespace TagCloud
 {
     interface IWordPainter
     {
-        Color GetColorWord(string word, Size rectangleForWord);
-        Font GetFontWord(string word, Size rectangleForWord);
+        Color GetColorWord(string word);
+        Font GetFontWord(string word);
     }
 }

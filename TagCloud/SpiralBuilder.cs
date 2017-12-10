@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace TagCloud
 {
-    class CircularCloudLayouter
+    class SpiralBuilder: IBuilderTagCloud
     {
         private readonly List<Rectangle> builtRectangles;
         private List<Point> spiralPoints;
@@ -35,7 +35,7 @@ namespace TagCloud
             return x < 0 && y < 0;
         }
 
-        public CircularCloudLayouter(Point centerWindow, int widthWindow, int heightWindow)
+        public SpiralBuilder(Point centerWindow, int widthWindow, int heightWindow)
         {
             builtRectangles = new List<Rectangle>();
             PutPointsOnSpiral(centerWindow);
@@ -43,7 +43,7 @@ namespace TagCloud
         }
 
 
-        public Rectangle PutNextRectangle(Size rectangleSize)
+        public Point GetLocationNextRectangle(Size rectangleSize)
         {
 
             foreach (var spiralPoint in spiralPoints)
@@ -53,7 +53,7 @@ namespace TagCloud
                 if (IsCorrectLocation(rectangle))
                 {
                     builtRectangles.Add(rectangle);
-                    return rectangle;
+                    return rectangle.Location;
                 }
             }
             throw new Exception("Cloud is full");

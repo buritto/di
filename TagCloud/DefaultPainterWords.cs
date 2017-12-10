@@ -4,14 +4,14 @@ namespace TagCloud
 {
     internal class DefaultPainterWords : IWordPainter
     {
-        public Color GetColorWord(string word, Size rectangleForWord)
+        public Color GetColorWord(string word)
         {
             return Color.Red;
         }
 
-        public Font GetFontWord(string word, Size rectangleForWord)
+        public Font GetFontWord(string word)
         {
-            return new Font(FontFamily.GenericSansSerif, rectangleForWord.Height / word.Length + 1);
+            return new Font(FontFamily.GenericSansSerif, 24);
         }
     }
 }
