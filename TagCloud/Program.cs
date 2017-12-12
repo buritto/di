@@ -2,7 +2,6 @@
 using System.Drawing;
 using Autofac;
 using DocoptNet;
-using System.Drawing;
 using System.Linq;
 
 namespace TagCloud
