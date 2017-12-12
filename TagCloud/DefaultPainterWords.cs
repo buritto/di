@@ -9,9 +9,9 @@ namespace TagCloud
         public FontStyle fontStyle { get; }
         public FontFamily fontFamily { get; }
 
-        public DefaultPainterWords()
+        public DefaultPainterWords(float maxSize = 120)
         {
-            maxSize = 150;
+            this.maxSize = maxSize;
             fontFamily = FontFamily.GenericSansSerif;
             fontStyle = FontStyle.Regular;
         }
@@ -28,7 +28,8 @@ namespace TagCloud
 
         public float GetFontSize(string word, float maxWeight, float minWeight, float weightWord)
         {
-            return maxSize * (weightWord - minWeight) / (maxWeight - minWeight);
+            var size = maxSize * (weightWord - minWeight) / (maxWeight - minWeight);
+            return size;
         }
     }
 }
