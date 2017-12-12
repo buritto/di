@@ -32,7 +32,8 @@ namespace TagCloud
                 for (int i = 0; i < allWords.Count; i++)
                 {
                     var word = allWords[i];
-                    var fontForWord = pictureConfigurator.Painter.GetFontWord(word);
+                    var fontForWord = GetFont(pictureConfigurator.Painter, wordsAndCount[0].Item2
+                        , wordsAndCount.Last().Item2, wordsAndCount[i].Item2, word);
                     var vertecRectangle = GetVertex(g.MeasureString(word, fontForWord));
                     var rectangle = new RectangleF(vertecRectangle, g.MeasureString(word, fontForWord));
                     var colorForWord = pictureConfigurator.Painter.GetColorWord(word);
@@ -45,6 +46,13 @@ namespace TagCloud
                 picture.Save(pictureResultName);
             }
         }
+
+        private Font GetFont(IWordPainter pictureConfiguratorPainter, float maxWeight, float minWeight, float weightWord, string word)
+        {
+            var fontSize = pictureConfiguratorPainter.GetFontSize(word, maxWeight, minWeight, weightWord) + 1;
+            return pictureConfiguratorPainter.GetFontWord(word, fontSize);
+        }
+
 
         private Point GetVertex(SizeF sizeReactangleForWords)
         {
