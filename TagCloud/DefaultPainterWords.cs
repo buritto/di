@@ -8,17 +8,19 @@ namespace TagCloud
         public float maxSize { get; }
         public FontStyle fontStyle { get; }
         public FontFamily fontFamily { get; }
+        public Color color { get; }
 
-        public DefaultPainterWords(float maxSize = 120)
+        public DefaultPainterWords(Color color, float maxSize, FontStyle fontStyle)
         {
             this.maxSize = maxSize;
             fontFamily = FontFamily.GenericSansSerif;
-            fontStyle = FontStyle.Regular;
+            this.fontStyle = fontStyle;
+            this.color = color;
         }
 
         public Color GetColorWord(string word)
         {
-            return Color.Red;
+            return color;
         }
 
         public Font GetFontWord(string word, Single sizeFont)
