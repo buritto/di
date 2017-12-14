@@ -19,7 +19,7 @@ namespace TagCloud
                 config = config.SetMinCountSymbolInWord(count);
                 return config;
             }).As<IEditor>();
-            builder.Register(c => new PictureConfigurator(width, height, color, maxSizeWord, style));
+            builder.Register(c => new PictureConfigurator(width, height, color, maxSizeWord, style)).As<IPainter>();
             builder.Register(c => new SpiralBuilder(new Point(width / 2, height / 2), width, height))
                 .As<IBuilderTagCloud>();
             builder.RegisterType<TagCloud>();

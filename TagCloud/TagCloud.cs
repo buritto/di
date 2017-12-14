@@ -6,13 +6,13 @@ namespace TagCloud
 {
     class TagCloud
     {
-        private PictureConfigurator pictureConfigurator;
-        private IEditor contentConfigurator;
-        private IFormatReader reader;
-        private IBuilderTagCloud builder;
+        private readonly IPainter pictureConfigurator;
+        private readonly IEditor contentConfigurator;
+        private readonly IFormatReader reader;
+        private readonly IBuilderTagCloud builder;
 
         public TagCloud(IFormatReader reader, IEditor contentConfigurator,
-            PictureConfigurator pictureConfigurator, IBuilderTagCloud builder)
+            IPainter pictureConfigurator, IBuilderTagCloud builder)
         {
             this.reader = reader;
             this.contentConfigurator = contentConfigurator;
