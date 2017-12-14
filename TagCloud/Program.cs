@@ -71,11 +71,11 @@ namespace TagCloud
             catch (Exception e)
             {
                 Console.WriteLine(e.Message + e.StackTrace);
-            }
-            foreach (var argument in arguments)
-            {
-                Console.WriteLine("{0} = {1}", argument.Key, argument.Value);
-            }
+            //}
+            //foreach (var argument in arguments)
+            //{
+            //    Console.WriteLine("{0} = {1}", argument.Key, argument.Value);
+            //}
             //StartTagCloud(1200, 900);
         }
     }

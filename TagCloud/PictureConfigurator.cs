@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace TagCloud
 {
@@ -11,6 +12,10 @@ namespace TagCloud
 
         public PictureConfigurator(int width, int height, Color color, float maxSize = 120, FontStyle fontStyle = FontStyle.Regular)
         {
+            if (width <= 0 || height <= 0)
+            {
+                throw new ArgumentException("Width or height less zero");
+            }
             Width = width;
             Height = height;
             Painter = new DefaultPainterWords(color, maxSize, fontStyle);
