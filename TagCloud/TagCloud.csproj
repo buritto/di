@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchitectDecreasingSpiral.cs" />
+    <Compile Include="IEditor.cs" />
     <Compile Include="SpiralBuilder.cs" />
     <Compile Include="ContentConfigurator.cs" />
     <Compile Include="DefaultPainterWords.cs" />

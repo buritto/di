@@ -2,7 +2,7 @@
 
 namespace TagCloud
 {
-    class ContentConfigurator
+    class ContentConfigurator : IEditor
     {
         private readonly HashSet<string> boringWords;
         private int minLenght;
