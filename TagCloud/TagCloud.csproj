@@ -94,6 +94,7 @@
     <None Include="T4DocoptNet.tt.hooks.t4" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="input.txt" />
     <Content Include="Main.usage.txt" />
     <None Include="T4DocoptNet.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

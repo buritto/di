@@ -8,18 +8,20 @@ namespace TagCloud
 {
     class Program
     {
-        private static void StartTagCloud(int width, int height, int count, 
-            Color color, float maxSizeWord ,FontStyle style, String textFileName, String fileNameWithPicture)
+        private static void StartTagCloud(int width, int height, int count,
+            Color color, float maxSizeWord, FontStyle style, String textFileName, String fileNameWithPicture)
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<TxtReader>().As<IFormatReader>();
-            builder.Register(c => {
+            builder.Register(c =>
+            {
                 var config = new ContentConfigurator();
                 config = config.SetMinCountSymbolInWord(count);
                 return config;
             });
             builder.Register(c => new PictureConfigurator(width, height, color, maxSizeWord, style));
-            builder.Register(c => new SpiralBuilder(new Point(width / 2, height/2), width, height)).As<IBuilderTagCloud>();
+            builder.Register(c => new SpiralBuilder(new Point(width / 2, height / 2), width, height))
+                .As<IBuilderTagCloud>();
             builder.RegisterType<TagCloud>();
             var container = builder.Build();
             using (var scope = container.BeginLifetimeScope())
@@ -45,7 +47,7 @@ namespace TagCloud
         --color COLOR       Color text.[default: Red]
         --style STYLE       Font Style.[default: FontStyle.Regular]
         --text TEXT         File name\path is have some text.[default: textInRoot.txt]
-        --pict PICTURE   File name\path where save picture.[default: pictureInRoot.png]
+        --pict PICTURE      File name\path where save picture.[default: pictureInRoot.png]
     ";
 
         static void Main(string[] args)
@@ -71,12 +73,13 @@ namespace TagCloud
             catch (Exception e)
             {
                 Console.WriteLine(e.Message + e.StackTrace);
-            //}
-            //foreach (var argument in arguments)
-            //{
-            //    Console.WriteLine("{0} = {1}", argument.Key, argument.Value);
-            //}
-            //StartTagCloud(1200, 900);
+                //}
+                //foreach (var argument in arguments)
+                //{
+                //    Console.WriteLine("{0} = {1}", argument.Key, argument.Value);
+                //}
+                //StartTagCloud(1200, 900);
+            }
         }
     }
 }

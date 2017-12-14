@@ -5,6 +5,5 @@ namespace TagCloud
     interface IBuilderTagCloud
     {
         Point GetLocationNextRectangle(Size rectangleSize);
-
     }
 }
