@@ -1,21 +1,20 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace TagCloud
 {
-    internal class DefaultPainterWords : IWordPainter
+    internal class DefaultWordPainter : IWordPainter
     {
         public float MaxSize { get; }
         public FontStyle FontStyle { get; }
         public FontFamily FontFamily { get; }
         public Color Color { get; }
 
-        public DefaultPainterWords(Color color, float maxSize, FontStyle fontStyle)
+        public DefaultWordPainter(Color color, float maxSize, FontStyle fontStyle)
         {
-            this.MaxSize = maxSize;
+            MaxSize = maxSize;
             FontFamily = FontFamily.GenericSansSerif;
-            this.FontStyle = fontStyle;
-            this.Color = color;
+            FontStyle = fontStyle;
+            Color = color;
         }
 
         public Color GetColorWord(string word)

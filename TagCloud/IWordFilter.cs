@@ -7,7 +7,7 @@
     {
         IWordFilter AddBoringWord(string word);
         IWordFilter SetMinCountSymbolInWord(int lenght);
-        bool ValidWord(string word);
+        bool IsWordValid(string word);
     }
 }
 

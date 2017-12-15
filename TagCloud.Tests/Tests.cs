@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 
-namespace TagCloud
+namespace TagCloud.Tests
 {
     [TestFixture]
     class TestTagCloud
@@ -46,7 +44,7 @@ namespace TagCloud
                     p.GetFontSize(word, maxWeight, minWeight, weightWord))
                 .Returns(100);
             var tagCloud = new TagCloud(reader.Object, wordFilter.Object, painter.Object, tagCloudBuilder.Object);
-            var actual = tagCloud.GetFont(wordPainter.Object, maxWeight, minWeight, weightWord, word);
+            var actual = TagCloud.GetFont(wordPainter.Object, maxWeight, minWeight, weightWord, word);
             actual.Should().Be(exprected);
 
         }

@@ -12,8 +12,11 @@ namespace TagCloud
         private readonly IFormatReader reader;
         private readonly ITagCloudBuilder builder;
 
-        public TagCloud(IFormatReader reader, IWordFilter contentConfigurator,
-            IPainter pictureConfigurator, ITagCloudBuilder builder)
+        public TagCloud(
+            IFormatReader reader,
+            IWordFilter contentConfigurator,
+            IPainter pictureConfigurator,
+            ITagCloudBuilder builder)
         {
             this.reader = reader;
             this.contentConfigurator = contentConfigurator;
@@ -24,36 +27,40 @@ namespace TagCloud
         public void PaintTagCloud(string inputFile, string pictureResultName)
         {
             var words = reader.GetFileData(inputFile)
-                .Where(word => contentConfigurator.ValidWord(word.Text))
-                .ToList();
-            words.Sort((w1, w2) => w2.Quantity.CompareTo(w1.Quantity));
+                .Where(word => contentConfigurator.IsWordValid(word.Text))
+                .OrderByDescending(w => w.Quantity)
+                .ToArray(); // note: use ToList only if you intend to add items
+
+            var maxQuantity = words.First().Quantity;
+            var minQuantity = words.Last().Quantity;
+
             var picture = new Bitmap(pictureConfigurator.Width, pictureConfigurator.Height);
             using (var g = Graphics.FromImage(picture))
             {
                 foreach (var word in words)
                 {
-                    var fontForWord = GetFont(pictureConfigurator.Painter, words.First().Quantity,
-                        words.Last().Quantity, word.Quantity, word.Text);
-                    var vertecRectangle = GetVertex(g.MeasureString(word.Text, fontForWord));
-                    var rectangle = new RectangleF(vertecRectangle, g.MeasureString(word.Text, fontForWord));
+                    var fontForWord = GetFont(pictureConfigurator.Painter, maxQuantity,
+                        minQuantity, word.Quantity, word.Text);
+
+                    var sizeOfWord = g.MeasureString(word.Text, fontForWord);
+                    var leftTopCorner = GetVertex(sizeOfWord);
+                    var rectangle = new RectangleF(leftTopCorner, sizeOfWord);
                     var colorForWord = pictureConfigurator.Painter.GetColorWord(word.Text);
-                    g.DrawString(
-                        word.Text,
-                        fontForWord, 
-                        new SolidBrush(colorForWord),
-                        rectangle);
+
+                    using (var solidBrush = new SolidBrush(colorForWord))
+                        g.DrawString(word.Text, fontForWord, solidBrush, rectangle);
                 }
                 picture.Save(pictureResultName);
             }
         }
 
-        internal Font GetFont(IWordPainter pictureConfiguratorPainter, float maxWeight, float minWeight, float weightWord, string word)
+        public  static Font GetFont(IWordPainter pictureConfiguratorPainter, float maxWeight, float minWeight, float weightWord, string word)
         {
             var fontSize = pictureConfiguratorPainter.GetFontSize(word, maxWeight, minWeight, weightWord) + 1;
             return pictureConfiguratorPainter.GetFontWord(word, fontSize);
         }
 
-
+        // todo: handle exception
         internal Point GetVertex(SizeF sizeReactangleForWords)
         {
             var locationRectangle = new Point();
@@ -61,7 +68,7 @@ namespace TagCloud
             {
                 locationRectangle = builder.GetLocationNextRectangle(Size.Round(sizeReactangleForWords));
             }
-            catch (Exception e)
+            catch
             {
                 // ignored
             }
