@@ -8,8 +8,8 @@ namespace TagCloud
         private int minLenght;
 
         public ContentConfigurator()
+            : this(new HashSet<string>())
         {
-            boringWords = new HashSet<string>();
         }
 
         public ContentConfigurator(HashSet<string> boringWords)
@@ -23,17 +23,15 @@ namespace TagCloud
             return this;
         }
 
-
         public IWordFilter SetMinCountSymbolInWord(int lenght)
         {
             minLenght = lenght;
             return this;
         }
 
-        public bool ValidWord(string word)
+        public bool IsWordValid(string word)
         {
-            return !boringWords.Contains(word) && word.Length >= minLenght;
+            return word.Length >= minLenght && !boringWords.Contains(word);
         }
-
     }
 }
