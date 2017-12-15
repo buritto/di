@@ -28,11 +28,10 @@ namespace TagCloud
                 .ToList();
             words.Sort((w1, w2) => w2.Quantity.CompareTo(w1.Quantity));
             var picture = new Bitmap(pictureConfigurator.Width, pictureConfigurator.Height);
-            using (Graphics g = Graphics.FromImage(picture))
+            using (var g = Graphics.FromImage(picture))
             {
-                for (int i = 0; i < words.Count; i++)
+                foreach (var word in words)
                 {
-                    var word = words[i];
                     var fontForWord = GetFont(pictureConfigurator.Painter, words.First().Quantity,
                         words.Last().Quantity, word.Quantity, word.Text);
                     var vertecRectangle = GetVertex(g.MeasureString(word.Text, fontForWord));
