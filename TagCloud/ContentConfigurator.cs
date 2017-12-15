@@ -4,8 +4,8 @@ namespace TagCloud
 {
     public class ContentConfigurator : IWordFilter
     {
-        private readonly HashSet<string> boringWords;
-        private int minLenght;
+        public HashSet<string> BoringWords { get; private set; }
+        public int MinLenght { get; private set; }
 
         public ContentConfigurator()
             : this(new HashSet<string>())
@@ -14,24 +14,24 @@ namespace TagCloud
 
         public ContentConfigurator(HashSet<string> boringWords)
         {
-            this.boringWords = boringWords;
+            this.BoringWords = boringWords;
         }
 
         public IWordFilter AddBoringWord(string word)
         {
-            boringWords.Add(word);
+            BoringWords.Add(word);
             return this;
         }
 
         public IWordFilter SetMinCountSymbolInWord(int lenght)
         {
-            minLenght = lenght;
+            MinLenght = lenght;
             return this;
         }
 
         public bool IsWordValid(string word)
         {
-            return word.Length >= minLenght && !boringWords.Contains(word);
+            return word.Length >= MinLenght && !BoringWords.Contains(word);
         }
     }
 }

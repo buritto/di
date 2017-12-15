@@ -31,6 +31,9 @@ namespace TagCloud
                 .OrderByDescending(w => w.Quantity)
                 .ToArray(); // note: use ToList only if you intend to add items
 
+            if (words.Length == 0)
+                throw  new ArgumentException("Not text, file is empty or not valid text");
+
             var maxQuantity = words.First().Quantity;
             var minQuantity = words.Last().Quantity;
 

@@ -10,20 +10,14 @@ namespace TagCloud.Tests
     class TestTagCloud
     {
 
-        //[TestCase(-100, 100)]
-        //[TestCase(100, -100)]
-        //public void TestPictureConfigWithIncorrectArgumentsWindow(int width, int height)
-        //{
-        //    Color color = Color.Aqua;
-        //    var fakePictureConfig = new Mock<PictureConfigurator>(width, height, color, 120, FontStyle.Regular);
-
-        //}
-
         private Mock<IFormatReader> reader;
         private Mock<IWordFilter> wordFilter;
         private Mock<IPainter> painter;
         private Mock<ITagCloudBuilder> tagCloudBuilder;
         private Mock<IWordPainter> wordPainter;
+        private string inputFileName = "input.txt";
+        private string outputFileName = "output.png";
+
         [SetUp]
         public void SetUp()
         {
@@ -35,13 +29,21 @@ namespace TagCloud.Tests
                     new Word("Word2", 2),
                     new Word("Word3", 3)
                 });
+
             wordFilter = new Mock<IWordFilter>();
+            wordFilter.Setup(filter => filter.MinLenght).Returns(0);
+            wordFilter.Setup(filter => filter.BoringWords).Returns(new HashSet<string>());
             wordFilter.Setup(filter => filter.IsWordValid(It.IsAny<string>())).Returns(true);
+            wordFilter.Setup(filter => filter.IsWordValid(It.IsAny<string>()))
+                .Returns((string word) => word.Length > wordFilter.Object.MinLenght && !wordFilter.Object.BoringWords.Contains(word));
+
             painter = new Mock<IPainter>();
             painter.Setup(p => p.Height).Returns(100);
             painter.Setup(p => p.Width).Returns(100);
+
             tagCloudBuilder = new Mock<ITagCloudBuilder>();
             wordPainter = new Mock<IWordPainter>();
+
             painter.Setup(p => p.Painter).Returns(wordPainter.Object);
             wordPainter.Setup(p => p.GetFontWord(It.IsAny<string>(), It.IsAny<float>()))
                 .Returns(new Font(FontFamily.GenericSansSerif, 100, FontStyle.Regular));
@@ -69,7 +71,7 @@ namespace TagCloud.Tests
         public void CallGetFontForEachDifferentWord()
         {
             var tagCloud = new TagCloud(reader.Object, wordFilter.Object, painter.Object, tagCloudBuilder.Object);
-            tagCloud.PaintTagCloud("testTextFile.txt", "testPicture.png");
+            tagCloud.PaintTagCloud(inputFileName, outputFileName);
             wordPainter.Verify(wp => wp.GetFontWord(It.IsAny<string>(), It.IsAny<float>()), Times.Exactly(3));
         }
 
@@ -77,8 +79,58 @@ namespace TagCloud.Tests
         public void CallGetColorForEachDifferentWord()
         {
             var tagCloud = new TagCloud(reader.Object, wordFilter.Object, painter.Object, tagCloudBuilder.Object);
-            tagCloud.PaintTagCloud("testTextFile.txt", "testPicture.png");
+            tagCloud.PaintTagCloud(inputFileName, outputFileName);
             wordPainter.Verify(wp => wp.GetColorWord(It.IsAny<string>()), Times.Exactly(3));
+        }
+
+        [Test]
+        public void VerifyValidText()
+        {
+            wordFilter.Setup(filter => filter.IsWordValid(It.IsAny<string>())).Returns(false);
+            var tagCloud = new TagCloud(reader.Object, wordFilter.Object, painter.Object, tagCloudBuilder.Object);
+            Assert.That(() => tagCloud.PaintTagCloud(inputFileName, outputFileName), Throws.ArgumentException);
+        }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        public void CheckWordFilter_ValidWordsMoreSymbilThen(int min)
+        {
+            reader.Setup(formatReader => formatReader.GetFileData(It.IsAny<string>())).Returns(
+                new List<Word>()
+                {
+                    new Word("w", 1),
+                    new Word("wo", 2),
+                    new Word("wor", 3),
+                    new Word("word", 4)
+                });
+            wordFilter.Setup(filter => filter.MinLenght).Returns(min);
+            wordFilter.Setup(filter => filter.BoringWords).Returns(new HashSet<string>());
+            wordFilter.Setup(filter => filter.IsWordValid(It.IsAny<string>()))
+                .Returns((string word) => word.Length > wordFilter.Object.MinLenght && !wordFilter.Object.BoringWords.Contains(word));
+            var tagCloud = new TagCloud(reader.Object, wordFilter.Object, painter.Object, tagCloudBuilder.Object);
+            tagCloud.PaintTagCloud(inputFileName, outputFileName);
+            tagCloudBuilder.Verify(builder => builder.GetLocationNextRectangle(It.IsAny<Size>()),
+                Times.Exactly(4 - min));
+        }
+
+        [Test]
+        public void CheckWordFilter_WithExcludingWords()
+        {
+            var exclude = new HashSet<string>(){"word3", "word1"};
+            wordFilter.Setup(filter => filter.BoringWords).Returns(exclude);
+            reader.Setup(formatReader => formatReader.GetFileData(It.IsAny<string>())).Returns(
+                new List<Word>()
+                {
+                    new Word("word1", 11),
+                    new Word("word2", 32),
+                    new Word("word3", 13),
+                    new Word("word4", 234)
+                });
+            var tagCloud = new TagCloud(reader.Object, wordFilter.Object, painter.Object, tagCloudBuilder.Object);
+            tagCloud.PaintTagCloud(inputFileName, outputFileName);
+            tagCloudBuilder.Verify(builder => builder.GetLocationNextRectangle(It.IsAny<Size>()),
+                Times.Exactly(2));
         }
     }
 }
