@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 
@@ -18,6 +19,37 @@ namespace TagCloud
         //    var fakePictureConfig = new Mock<PictureConfigurator>(width, height, color, 120, FontStyle.Regular);
 
         //}
+
+        private Mock<IFormatReader> reader;
+        private Mock<IWordFilter> wordFilter;
+        private Mock<IPainter> painter;
+        private Mock<ITagCloudBuilder> tagCloudBuilder;
+        private Mock<IWordPainter> wordPainter;
+        [SetUp]
+        public void SetUp()
+        {
+            reader = new Mock<IFormatReader>();
+            wordFilter = new Mock<IWordFilter>();
+            painter = new Mock<IPainter>();
+            tagCloudBuilder = new Mock<ITagCloudBuilder>();
+            wordPainter = new Mock<IWordPainter>();
+           
+        }
+
+        [TestCase(100, 100, 100, "someWord")]
+        public void TestGetFontForWordEqualWeight(float maxWeight, float minWeight, float weightWord, string word)
+        {
+            var exprected = new Font(FontFamily.GenericSansSerif, 100, FontStyle.Regular);
+            wordPainter.Setup(p => p.GetFontWord(It.IsAny<string>(), It.IsAny<float>()))
+                .Returns(exprected);
+            wordPainter.Setup(p =>
+                    p.GetFontSize(word, maxWeight, minWeight, weightWord))
+                .Returns(100);
+            var tagCloud = new TagCloud(reader.Object, wordFilter.Object, painter.Object, tagCloudBuilder.Object);
+            var actual = tagCloud.GetFont(wordPainter.Object, maxWeight, minWeight, weightWord, word);
+            actual.Should().Be(exprected);
+
+        }
 
         [TestCase("word1 word2 word1 word2")]
         public void TestCorrectUsingWordPainter_GetFileData(string text)

@@ -47,14 +47,14 @@ namespace TagCloud
             }
         }
 
-        private Font GetFont(IWordPainter pictureConfiguratorPainter, float maxWeight, float minWeight, float weightWord, string word)
+        internal Font GetFont(IWordPainter pictureConfiguratorPainter, float maxWeight, float minWeight, float weightWord, string word)
         {
             var fontSize = pictureConfiguratorPainter.GetFontSize(word, maxWeight, minWeight, weightWord) + 1;
             return pictureConfiguratorPainter.GetFontWord(word, fontSize);
         }
 
 
-        private Point GetVertex(SizeF sizeReactangleForWords)
+        internal Point GetVertex(SizeF sizeReactangleForWords)
         {
             var locationRectangle = new Point();
             try
