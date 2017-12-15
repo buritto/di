@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
-using JetBrains.Annotations;
 
 namespace TagCloud
 {
@@ -22,25 +21,25 @@ namespace TagCloud
             this.builder = builder;
         }
 
-        public void PaintTagCloud(string fileTestName, string pictureResultName)
+        public void PaintTagCloud(string inputFile, string pictureResultName)
         {
-            var wordsAndCount = reader.GetFileData(fileTestName);
-            wordsAndCount.Sort((t1, t2) => t2.Item2.CompareTo(t1.Item2));
-            var words = wordsAndCount.Where(tuple => contentConfigurator.ValidWord(tuple.Item1)).ToList();
-            var allWords = words.Select(tuple => tuple.Item1).ToList();
+            var words = reader.GetFileData(inputFile)
+                .Where(word => contentConfigurator.ValidWord(word.Text))
+                .ToList();
+            words.Sort((w1, w2) => w2.Quantity.CompareTo(w1.Quantity));
             var picture = new Bitmap(pictureConfigurator.Width, pictureConfigurator.Height);
             using (Graphics g = Graphics.FromImage(picture))
             {
-                for (int i = 0; i < allWords.Count; i++)
+                for (int i = 0; i < words.Count; i++)
                 {
-                    var word = allWords[i];
-                    var fontForWord = GetFont(pictureConfigurator.Painter, wordsAndCount[0].Item2
-                        , wordsAndCount.Last().Item2, wordsAndCount[i].Item2, word);
-                    var vertecRectangle = GetVertex(g.MeasureString(word, fontForWord));
-                    var rectangle = new RectangleF(vertecRectangle, g.MeasureString(word, fontForWord));
-                    var colorForWord = pictureConfigurator.Painter.GetColorWord(word);
+                    var word = words[i];
+                    var fontForWord = GetFont(pictureConfigurator.Painter, words.First().Quantity,
+                        words.Last().Quantity, word.Quantity, word.Text);
+                    var vertecRectangle = GetVertex(g.MeasureString(word.Text, fontForWord));
+                    var rectangle = new RectangleF(vertecRectangle, g.MeasureString(word.Text, fontForWord));
+                    var colorForWord = pictureConfigurator.Painter.GetColorWord(word.Text);
                     g.DrawString(
-                        word,
+                        word.Text,
                         fontForWord, 
                         new SolidBrush(colorForWord),
                         rectangle);

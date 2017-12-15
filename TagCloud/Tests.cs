@@ -26,10 +26,10 @@ namespace TagCloud
             fakeWordPainter.Verify(painter => painter.GetFontSize(It.IsAny<string>()
                 ,It.IsAny<float>(), It.IsAny<float>(), It.IsAny<float>()), Times.AtLeast(2));
             var fakeReader = new Mock<IFormatReader>();
-            fakeReader.Setup(reader => reader.GetFileData(It.IsAny<string>())).Returns(
-                new List<Tuple<string, int>>{
-                new Tuple<string, int>("word1", 2),
-                new Tuple<string, int>("word2", 2)});
+            //fakeReader.Setup(reader => reader.GetFileData(It.IsAny<string>())).Returns(
+            //    new List<Tuple<string, int>>{
+            //    new Tuple<string, int>("word1", 2),
+            //    new Tuple<string, int>("word2", 2)});
         }
 
     }

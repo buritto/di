@@ -30,7 +30,7 @@ namespace TagCloud
 
         public float GetFontSize(string word, float maxWeight, float minWeight, float weightWord)
         {
-            var size = MaxSize * (weightWord - minWeight) / (maxWeight - minWeight);
+            var size = MaxSize * ((weightWord - minWeight) / (maxWeight - minWeight + 1));
             return size;
         }
     }

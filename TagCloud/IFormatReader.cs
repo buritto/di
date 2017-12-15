@@ -7,6 +7,6 @@ namespace TagCloud
      /// </summary>
     public interface IFormatReader
     {
-        List<Tuple<string, int>> GetFileData(string fileName); // todo: use a Word class /aa
+        List<Word> GetFileData(string fileName); // todo: use a Word class /aa
     }
 }
