@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace TagCloud
 {    /// <summary>
@@ -7,6 +6,6 @@ namespace TagCloud
      /// </summary>
     public interface IFormatReader
     {
-        List<Word> GetFileData(string fileName); // todo: use a Word class /aa
+        List<Word> GetFileData(string fileName); 
     }
 }
