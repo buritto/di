@@ -46,7 +46,7 @@ namespace TagCloud
         --color COLOR       Color text.[default: Red]
         --style STYLE       Font Style.[default: FontStyle.Regular]
         --text TEXT         File name\path is have some text.[default: input.txt]
-        --pict PICTURE      File name\path where save picture.[default: pictureInRoot.png]
+        --pict PICTURE      File name\path where save picture.[default: output.png]
     ";
 
         static void Main(string[] args)
