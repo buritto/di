@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 
-namespace TagCloud
+namespace TagCloud.Tests
 {
     [TestFixture]
     class TestTagCloud
