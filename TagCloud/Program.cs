@@ -2,26 +2,25 @@
 using System.Drawing;
 using Autofac;
 using DocoptNet;
-using System.Linq;
 
 namespace TagCloud
 {
-    class Program
+    public static class Program
     {
         private static void StartTagCloud(int width, int height, int count,
-            Color color, float maxSizeWord, FontStyle style, String textFileName, String fileNameWithPicture)
+            Color color, float maxSizeWord, FontStyle style, string textFileName, string fileNameWithPicture)
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<TxtReader>().As<IFormatReader>();
             builder.Register(c =>
             {
-                var config = new ContentConfigurator();
+                IWordFilter config = new ContentConfigurator();
                 config = config.SetMinCountSymbolInWord(count);
-                return config;
-            }).As<IEditor>();
+                return (ContentConfigurator)config;
+            }).As<IWordFilter>();
             builder.Register(c => new PictureConfigurator(width, height, color, maxSizeWord, style)).As<IPainter>();
             builder.Register(c => new SpiralBuilder(new Point(width / 2, height / 2), width, height))
-                .As<IBuilderTagCloud>();
+                .As<ITagCloudBuilder>();
             builder.RegisterType<TagCloud>();
             var container = builder.Build();
             using (var scope = container.BeginLifetimeScope())

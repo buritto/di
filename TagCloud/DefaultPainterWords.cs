@@ -5,32 +5,32 @@ namespace TagCloud
 {
     internal class DefaultPainterWords : IWordPainter
     {
-        public float maxSize { get; }
-        public FontStyle fontStyle { get; }
-        public FontFamily fontFamily { get; }
-        public Color color { get; }
+        public float MaxSize { get; }
+        public FontStyle FontStyle { get; }
+        public FontFamily FontFamily { get; }
+        public Color Color { get; }
 
         public DefaultPainterWords(Color color, float maxSize, FontStyle fontStyle)
         {
-            this.maxSize = maxSize;
-            fontFamily = FontFamily.GenericSansSerif;
-            this.fontStyle = fontStyle;
-            this.color = color;
+            this.MaxSize = maxSize;
+            FontFamily = FontFamily.GenericSansSerif;
+            this.FontStyle = fontStyle;
+            this.Color = color;
         }
 
         public Color GetColorWord(string word)
         {
-            return color;
+            return Color;
         }
 
-        public Font GetFontWord(string word, Single sizeFont)
+        public Font GetFontWord(string word, float sizeFont)
         {
-            return new Font(fontFamily, sizeFont, fontStyle);
+            return new Font(FontFamily, sizeFont, FontStyle);
         }
 
         public float GetFontSize(string word, float maxWeight, float minWeight, float weightWord)
         {
-            var size = maxSize * (weightWord - minWeight) / (maxWeight - minWeight);
+            var size = MaxSize * (weightWord - minWeight) / (maxWeight - minWeight);
             return size;
         }
     }

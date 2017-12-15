@@ -13,7 +13,19 @@ namespace TagCloud
         {
             var wordsFromFile = new List<string>();
             if (!fileName.EndsWith(formatFile))
-                throw new Exception("Incorrect format file");
+                throw new FormatException("Incorrect format file");
+
+            // todo: use single linq query /aa
+            var result = File.ReadLines(fileName)
+                .SelectMany(l => l.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries))
+                .GroupBy(w => w)
+                .Select(g => new Word
+                {
+                    Text = g.Key,
+                    Quantity = g.Count()
+                })
+                .ToList();
+
 
             using (StreamReader sr = new StreamReader(fileName))
             {

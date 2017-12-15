@@ -2,7 +2,7 @@
 
 namespace TagCloud
 {
-    class ContentConfigurator : IEditor
+    public class ContentConfigurator : IWordFilter
     {
         private readonly HashSet<string> boringWords;
         private int minLenght;
@@ -17,14 +17,14 @@ namespace TagCloud
             this.boringWords = boringWords;
         }
 
-        public ContentConfigurator AddBoringWord(string word)
+        public IWordFilter AddBoringWord(string word)
         {
             boringWords.Add(word);
             return this;
         }
 
 
-        public ContentConfigurator SetMinCountSymbolInWord(int lenght)
+        public IWordFilter SetMinCountSymbolInWord(int lenght)
         {
             minLenght = lenght;
             return this;

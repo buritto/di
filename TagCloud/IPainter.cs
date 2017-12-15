@@ -1,10 +1,14 @@
 ﻿namespace TagCloud
 {
-    interface IPainter
+    public interface IWindow
+    {
+        int Height { get; }
+        int Width { get; }
+    }
+
+    public interface IPainter : IWindow
     {
         IWordPainter Painter { get;}
-        int Height { get;}
-        int Width { get;}
         PictureConfigurator SetWordPainter(IWordPainter painter);
     }
 }

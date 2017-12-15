@@ -47,6 +47,10 @@
     <Reference Include="FluentAssertions.Core, Version=4.19.4.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <HintPath>..\packages\FluentAssertions.4.19.4\lib\net45\FluentAssertions.Core.dll</HintPath>
     </Reference>
+    <Reference Include="JetBrains.Annotations, Version=11.1.0.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
+      <HintPath>..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Moq, Version=4.7.145.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.7.145\lib\net45\Moq.dll</HintPath>
     </Reference>
@@ -69,13 +73,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArchitectDecreasingSpiral.cs" />
-    <Compile Include="IEditor.cs" />
+    <Compile Include="IWordFilter.cs" />
     <Compile Include="IPainter.cs" />
     <Compile Include="SpiralBuilder.cs" />
     <Compile Include="ContentConfigurator.cs" />
     <Compile Include="DefaultPainterWords.cs" />
     <Compile Include="IArchitect.cs" />
-    <Compile Include="IBuilderTagCloud.cs" />
+    <Compile Include="ITagCloudBuilder.cs" />
     <Compile Include="IFormatReader.cs" />
     <Compile Include="IWordPainter.cs" />
     <Compile Include="PictureConfigurator.cs" />
@@ -89,6 +93,7 @@
     <Compile Include="TagCloud.cs" />
     <Compile Include="Tests.cs" />
     <Compile Include="TxtReader.cs" />
+    <Compile Include="Word.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

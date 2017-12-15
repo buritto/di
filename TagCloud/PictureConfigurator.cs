@@ -3,12 +3,11 @@ using System.Drawing;
 
 namespace TagCloud
 {
-    class PictureConfigurator : IPainter
+    public class PictureConfigurator : IPainter
     {
         public int Height { get; private set; }
-        public  int Width { get; private set; }
+        public int Width { get; private set; }
         public IWordPainter Painter { get; private set; }
-
 
         private void CheckCorrectArgumentConstructor(int width, int height, Color color)
         {
@@ -35,6 +34,5 @@ namespace TagCloud
             Painter = painter;
             return this;
         }
-
     }
 }

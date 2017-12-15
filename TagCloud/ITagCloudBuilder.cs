@@ -2,7 +2,7 @@
 
 namespace TagCloud
 {
-    interface IBuilderTagCloud
+    public interface ITagCloudBuilder
     {
         Point GetLocationNextRectangle(Size rectangleSize);
     }

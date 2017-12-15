@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
+using JetBrains.Annotations;
 
 namespace TagCloud
 {
-    class TagCloud
+    [UsedImplicitly]
+    public class TagCloud
     {
         private readonly IPainter pictureConfigurator;
-        private readonly IEditor contentConfigurator;
+        private readonly IWordFilter contentConfigurator;
         private readonly IFormatReader reader;
-        private readonly IBuilderTagCloud builder;
+        private readonly ITagCloudBuilder builder;
 
-        public TagCloud(IFormatReader reader, IEditor contentConfigurator,
-            IPainter pictureConfigurator, IBuilderTagCloud builder)
+        public TagCloud(IFormatReader reader, IWordFilter contentConfigurator,
+            IPainter pictureConfigurator, ITagCloudBuilder builder)
         {
             this.reader = reader;
             this.contentConfigurator = contentConfigurator;

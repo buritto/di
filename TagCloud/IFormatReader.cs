@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace TagCloud
 {
-    interface IFormatReader
+    public interface IFormatReader
     {
-        List<Tuple<string, int>> GetFileData(string fileName);
+        List<Tuple<string, int>> GetFileData(string fileName); // todo: use a Word class /aa
     }
 }

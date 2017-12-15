@@ -1,16 +1,15 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace TagCloud
 {
-    interface IWordPainter
+    public interface IWordPainter
     {
-        Single maxSize { get;}
-        FontStyle fontStyle { get; }
-        FontFamily fontFamily { get; }
-        Color color { get; }
+        float MaxSize { get;}
+        FontStyle FontStyle { get; }
+        FontFamily FontFamily { get; }
+        Color Color { get; }
         Color GetColorWord(string word);
-        Font GetFontWord(string word, Single sizeFont);
-        Single GetFontSize(string word, Single maxWeight, Single minWeight, Single weightWord);
+        Font GetFontWord(string word, float sizeFont);
+        float GetFontSize(string word, float maxWeight, float minWeight, float weightWord);
     }
 }

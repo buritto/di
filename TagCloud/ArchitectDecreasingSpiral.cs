@@ -10,7 +10,7 @@ namespace TagCloud
         public List<Size> GetSizeWords(List<Tuple<string, int>> wordsAndCounts, int widthWindow, int heightWindow)
         {
             var countWords = wordsAndCounts.Count; 
-            var countAllWords = wordsAndCounts.Sum(tuple => tuple.Item2);
+            var countAllWords = wordsAndCounts.Sum(tuple => tuple.Item2); // ask: why this is requeired? /aa
             return wordsAndCounts.Select(tuple => new Size(
                 GetSide(tuple.Item2, countAllWords, widthWindow, countWords),
                 GetSide(tuple.Item2, countAllWords, heightWindow, countWords, tuple.Item1.Length))).ToList();
