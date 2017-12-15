@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace TagCloud
 {
-    class TxtReader : IFormatReader
+    public class TxtReader : IFormatReader
     {
         private string formatFile = ".txt";
 

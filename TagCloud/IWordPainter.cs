@@ -2,6 +2,9 @@
 
 namespace TagCloud
 {
+    /// <summary>
+    /// Creates and returns the style, size, font color for the word.
+    /// </summary>
     public interface IWordPainter
     {
         float MaxSize { get;}

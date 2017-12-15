@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 namespace TagCloud
 {
-    [UsedImplicitly]
+    //[UsedImplicitly]
     public class TagCloud
     {
         private readonly IPainter pictureConfigurator;

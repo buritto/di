@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace TagCloud
 {
-    class SpiralBuilder: ITagCloudBuilder
+    public class SpiralBuilder: ITagCloudBuilder
     {
         private readonly List<Rectangle> builtRectangles;
         private List<Point> spiralPoints;
