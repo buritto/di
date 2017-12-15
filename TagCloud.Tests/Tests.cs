@@ -28,6 +28,13 @@ namespace TagCloud.Tests
         public void SetUp()
         {
             reader = new Mock<IFormatReader>();
+            reader.Setup(formatReader => formatReader.GetFileData(It.IsAny<string>())).Returns(
+                new List<Word>()
+                {
+                    new Word("word1", 1),
+                    new Word("Word2", 2),
+                    new Word("Word3", 3)
+                });
             wordFilter = new Mock<IWordFilter>();
             wordFilter.Setup(filter => filter.IsWordValid(It.IsAny<string>())).Returns(true);
             painter = new Mock<IPainter>();
@@ -61,16 +68,17 @@ namespace TagCloud.Tests
         [Test]
         public void CallGetFontForEachDifferentWord()
         {
-            reader.Setup(formatReader => formatReader.GetFileData(It.IsAny<string>())).Returns(
-                new List<Word>()
-                {
-                    new Word("word1", 1),
-                    new Word("Word2", 2),
-                    new Word("Word3", 3)
-                });
             var tagCloud = new TagCloud(reader.Object, wordFilter.Object, painter.Object, tagCloudBuilder.Object);
             tagCloud.PaintTagCloud("testTextFile.txt", "testPicture.png");
             wordPainter.Verify(wp => wp.GetFontWord(It.IsAny<string>(), It.IsAny<float>()), Times.Exactly(3));
+        }
+
+        [Test]
+        public void CallGetColorForEachDifferentWord()
+        {
+            var tagCloud = new TagCloud(reader.Object, wordFilter.Object, painter.Object, tagCloudBuilder.Object);
+            tagCloud.PaintTagCloud("testTextFile.txt", "testPicture.png");
+            wordPainter.Verify(wp => wp.GetColorWord(It.IsAny<string>()), Times.Exactly(3));
         }
     }
 }
