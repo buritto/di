@@ -23,7 +23,7 @@ namespace TagCloud
                 .As<ITagCloudBuilder>();
             builder.RegisterType<TagCloud>();
             var container = builder.Build();
-            using (var scope = container.BeginLifetimeScope())
+            using (container.BeginLifetimeScope())
             {
                 var component = container.Resolve<TagCloud>();
                 component.PaintTagCloud(textFileName, fileNameWithPicture);

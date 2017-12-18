@@ -32,10 +32,9 @@ namespace TagCloud.Tests
 
             wordFilter = new Mock<IWordFilter>();
             wordFilter.Setup(filter => filter.MinLenght).Returns(0);
-            wordFilter.Setup(filter => filter.BoringWords).Returns(new HashSet<string>());
             wordFilter.Setup(filter => filter.IsWordValid(It.IsAny<string>())).Returns(true);
             wordFilter.Setup(filter => filter.IsWordValid(It.IsAny<string>()))
-                .Returns((string word) => word.Length > wordFilter.Object.MinLenght && !wordFilter.Object.BoringWords.Contains(word));
+                .Returns((string word) => word.Length > wordFilter.Object.MinLenght);
 
             painter = new Mock<IPainter>();
             painter.Setup(p => p.Height).Returns(100);
@@ -105,32 +104,12 @@ namespace TagCloud.Tests
                     new Word("word", 4)
                 });
             wordFilter.Setup(filter => filter.MinLenght).Returns(min);
-            wordFilter.Setup(filter => filter.BoringWords).Returns(new HashSet<string>());
             wordFilter.Setup(filter => filter.IsWordValid(It.IsAny<string>()))
-                .Returns((string word) => word.Length > wordFilter.Object.MinLenght && !wordFilter.Object.BoringWords.Contains(word));
+                .Returns((string word) => word.Length > wordFilter.Object.MinLenght);
             var tagCloud = new TagCloud(reader.Object, wordFilter.Object, painter.Object, tagCloudBuilder.Object);
             tagCloud.PaintTagCloud(inputFileName, outputFileName);
             tagCloudBuilder.Verify(builder => builder.GetLocationNextRectangle(It.IsAny<Size>()),
                 Times.Exactly(4 - min));
-        }
-
-        [Test]
-        public void CheckWordFilter_WithExcludingWords()
-        {
-            var exclude = new HashSet<string>(){"word3", "word1"};
-            wordFilter.Setup(filter => filter.BoringWords).Returns(exclude);
-            reader.Setup(formatReader => formatReader.GetFileData(It.IsAny<string>())).Returns(
-                new List<Word>()
-                {
-                    new Word("word1", 11),
-                    new Word("word2", 32),
-                    new Word("word3", 13),
-                    new Word("word4", 234)
-                });
-            var tagCloud = new TagCloud(reader.Object, wordFilter.Object, painter.Object, tagCloudBuilder.Object);
-            tagCloud.PaintTagCloud(inputFileName, outputFileName);
-            tagCloudBuilder.Verify(builder => builder.GetLocationNextRectangle(It.IsAny<Size>()),
-                Times.Exactly(2));
         }
     }
 }

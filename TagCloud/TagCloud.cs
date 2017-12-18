@@ -51,7 +51,7 @@ namespace TagCloud
                     {
                         leftTopCorner = builder.GetLocationNextRectangle(Size.Round(sizeOfWord));
                     }
-                    catch (Exception e)
+                    catch (Exception)
                     {
                         break;
                     }

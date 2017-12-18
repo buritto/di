@@ -4,7 +4,7 @@ namespace TagCloud
 {
     public class ContentConfigurator : IWordFilter
     {
-        public HashSet<string> BoringWords { get; private set; }
+        private HashSet<string> BoringWords { get;}
         public int MinLenght { get; private set; }
 
         public ContentConfigurator()
@@ -14,7 +14,7 @@ namespace TagCloud
 
         public ContentConfigurator(HashSet<string> boringWords)
         {
-            this.BoringWords = boringWords;
+            BoringWords = boringWords;
         }
 
         public IWordFilter AddBoringWord(string word)
