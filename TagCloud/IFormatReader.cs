@@ -6,6 +6,6 @@ namespace TagCloud
      /// </summary>
     public interface IFormatReader
     {
-        List<Word> GetFileData(string fileName); 
+        Result<List<Word>> GetFileData(string fileName); 
     }
 }

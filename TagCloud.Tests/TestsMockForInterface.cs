@@ -22,13 +22,13 @@ namespace TagCloud.Tests
         public void SetUp()
         {
             reader = new Mock<IFormatReader>();
-            reader.Setup(formatReader => formatReader.GetFileData(It.IsAny<string>())).Returns(
+            reader.Setup(formatReader => formatReader.GetFileData(It.IsAny<string>())).Returns( Result.Of(() =>
                 new List<Word>()
                 {
                     new Word("word1", 1),
                     new Word("Word2", 2),
                     new Word("Word3", 3)
-                });
+                }));
 
             wordFilter = new Mock<IWordFilter>();
             wordFilter.Setup(filter => filter.MinLenght).Returns(0);
@@ -95,14 +95,14 @@ namespace TagCloud.Tests
         [TestCase(3)]
         public void CheckWordFilter_ValidWordsMoreSymbilThen(int min)
         {
-            reader.Setup(formatReader => formatReader.GetFileData(It.IsAny<string>())).Returns(
+            reader.Setup(formatReader => formatReader.GetFileData(It.IsAny<string>())).Returns( Result.Of( () =>
                 new List<Word>()
                 {
                     new Word("w", 1),
                     new Word("wo", 2),
                     new Word("wor", 3),
                     new Word("word", 4)
-                });
+                }));
             wordFilter.Setup(filter => filter.MinLenght).Returns(min);
             wordFilter.Setup(filter => filter.IsWordValid(It.IsAny<string>()))
                 .Returns((string word) => word.Length > wordFilter.Object.MinLenght);

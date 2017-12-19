@@ -26,7 +26,7 @@ namespace TagCloud
 
         public void PaintTagCloud(string inputFile, string pictureResultName)
         {
-            var words = reader.GetFileData(inputFile)
+            var words = reader.GetFileData(inputFile).TryGetValue()
                 .Where(word => contentConfigurator.IsWordValid(word.Text))
                 .OrderByDescending(w => w.Quantity)
                 .ToArray(); // note: use ToList only if you intend to add items

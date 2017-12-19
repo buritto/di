@@ -11,20 +11,20 @@ namespace TagCloud
         private const string formatFile = ".txt";
 
         [AssertionMethod]
-        private void CheckCorrectFile(string fileName)
+        private string CheckCorrectFile(string fileName)
         {
             if (!fileName.EndsWith(formatFile))
-                throw new FormatException($"Incorrect file format {fileName}");
+               return $"Incorrect file format {fileName}";
+
             if (!File.Exists(fileName))
-            {
-                throw new FileNotFoundException($"Not found file: {fileName}");
-            }
+                return  $"Not found file: {fileName}";
+            return null;
         }
 
-        public List<Word> GetFileData(string fileName)
+        public Result<List<Word>> GetFileData(string fileName)
         {
             CheckCorrectFile(fileName);
-            return  File.ReadLines(fileName)
+            return  Result.Of(() => File.ReadLines(fileName)
                 .SelectMany(l => l.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries))
                 .Select(w => w.TrimEnd(',', '.', '?', '!'))
                 .GroupBy(w => w)
@@ -33,7 +33,7 @@ namespace TagCloud
                     Text = g.Key,
                     Quantity = g.Count()
                 })
-                .ToList();
+                .ToList(), CheckCorrectFile(fileName));
         }
     }
 }
