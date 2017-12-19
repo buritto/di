@@ -50,22 +50,29 @@ namespace TagCloud
 
         static void Main(string[] args)
         {
-            var arguments = new Docopt().Apply(usage, args, version: "Tag Cloud 0.1", exit: true);
             try
             {
-                var width = int.Parse(arguments["--width"].Value.ToString());
-                var height = int.Parse(arguments["--height"].Value.ToString());
-                var count = int.Parse(arguments["--count"].Value.ToString());
-                var maxSizeWord = float.Parse(arguments["--msize"].Value.ToString());
-                var color = (Color) new ColorConverter().ConvertFromString(arguments["--color"].ToString());
-                var fontStyle = ((Font) new FontConverter().ConvertFromString(arguments["--style"].ToString())).Style;
-                var textFileName = arguments["--text"].Value.ToString();
-                var fileNameWithPicture = arguments["--pict"].ToString();
-                StartTagCloud(width, height, count, color, maxSizeWord, fontStyle, textFileName, fileNameWithPicture);
+                var arguments = new Docopt().Apply(usage, args, version: "Tag Cloud 0.1", exit: true);
+
+                var width = Result.Of(() => int.Parse(arguments["--width"].Value.ToString()), "Incorrect width");
+                var height = Result.Of(() => int.Parse(arguments["--height"].Value.ToString()), "Incorrect height");
+                var count = Result.Of(() => int.Parse(arguments["--count"].Value.ToString()), "Incorrect count");
+                var maxSizeWord = Result.Of(() => float.Parse(arguments["--msize"].Value.ToString()),
+                    "Incorrect max size word");
+                var color = Result.Of(() =>
+                    (Color) new ColorConverter().ConvertFromString(arguments["--color"].ToString()), "Incorrect color");
+                var fontStyle = Result.Of(() =>
+                        ((Font) new FontConverter().ConvertFromString(arguments["--style"].ToString())).Style,
+                    "Incorrect font");
+                var textFileName = Result.Of(() => arguments["--text"].Value.ToString());
+                var fileNameWithPicture = Result.Of(() => arguments["--pict"].ToString());
+                StartTagCloud(width.TryGetValue(), height.TryGetValue(), count.TryGetValue(), color.TryGetValue(),
+                    maxSizeWord.TryGetValue(), fontStyle.TryGetValue(), textFileName.TryGetValue(),
+                    fileNameWithPicture.TryGetValue());
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message + e.StackTrace);
+                Console.WriteLine(e.Message);
             }
         }
     }
