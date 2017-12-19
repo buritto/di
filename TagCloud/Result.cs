@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Remoting.Messaging;
 
 namespace TagCloud
 {
@@ -10,8 +9,8 @@ namespace TagCloud
 
         public Result(string errorMessage, T value = default(T))
         {
-            this.ErrorMessage = errorMessage;
-            this.Value = value;
+            ErrorMessage = errorMessage;
+            Value = value;
         }
 
         public bool IsSuccess => ErrorMessage == null;

@@ -5,8 +5,8 @@
     /// </summary>
     public interface IWindow
     {
-        int Height { get; }
-        int Width { get; }
+        Result<int> Height { get; }
+        Result<int> Width { get; }
     }
 
     public interface IPainter : IWindow

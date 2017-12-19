@@ -7,26 +7,27 @@ namespace TagCloud
 {
     public static class Program
     {
-        private static void StartTagCloud(int width, int height, int count,
-            Color color, float maxSizeWord, FontStyle style, string textFileName, string fileNameWithPicture)
+        private static void StartTagCloud(Result<int> width, Result<int> height, Result<int> count,
+            Result<Color> color, Result<float> maxSizeWord, Result<FontStyle> style,
+            Result<string> textFileName, Result<string> fileNameWithPicture)
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<TxtReader>().As<IFormatReader>();
             builder.Register(c =>
             {
                 IWordFilter config = new ContentConfigurator();
-                config = config.SetMinCountSymbolInWord(count);
+                config = config.SetMinCountSymbolInWord(count.TryGetValue());
                 return (ContentConfigurator)config;
             }).As<IWordFilter>();
-            builder.Register(c => new PictureConfigurator(width, height, color, maxSizeWord, style)).As<IPainter>();
-            builder.Register(c => new SpiralBuilder(new Point(width / 2, height / 2), width, height))
+            builder.Register(c => new PictureConfigurator(width, height, color, maxSizeWord.TryGetValue(), style.TryGetValue())).As<IPainter>();
+            builder.Register(c => new SpiralBuilder(new Point(width.TryGetValue() / 2, height.TryGetValue() / 2), width.TryGetValue(), height.TryGetValue()))
                 .As<ITagCloudBuilder>();
             builder.RegisterType<TagCloud>();
             var container = builder.Build();
             using (container.BeginLifetimeScope())
             {
                 var component = container.Resolve<TagCloud>();
-                component.PaintTagCloud(textFileName, fileNameWithPicture);
+                component.PaintTagCloud(textFileName.TryGetValue(), fileNameWithPicture.TryGetValue());
             }
         }
 
@@ -66,9 +67,7 @@ namespace TagCloud
                     "Incorrect font");
                 var textFileName = Result.Of(() => arguments["--text"].Value.ToString());
                 var fileNameWithPicture = Result.Of(() => arguments["--pict"].ToString());
-                StartTagCloud(width.TryGetValue(), height.TryGetValue(), count.TryGetValue(), color.TryGetValue(),
-                    maxSizeWord.TryGetValue(), fontStyle.TryGetValue(), textFileName.TryGetValue(),
-                    fileNameWithPicture.TryGetValue());
+                StartTagCloud(width, height, count, color, maxSizeWord, fontStyle, textFileName,fileNameWithPicture);
             }
             catch (Exception e)
             {

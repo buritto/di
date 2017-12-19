@@ -7,6 +7,6 @@ namespace TagCloud
     /// </summary>
     public interface ITagCloudBuilder
     {
-        Point GetLocationNextRectangle(Size rectangleSize);
+        Result<Point> GetLocationNextRectangle(Size rectangleSize);
     }
 }

@@ -1,32 +1,33 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using JetBrains.Annotations;
 
 namespace TagCloud
 {
     public class PictureConfigurator : IPainter
     {
-        public int Height { get; }
-        public int Width { get; }
+        public Result<int> Height { get; }
+        public Result<int> Width { get; }
         public IWordPainter Painter { get; private set; }
 
-        public PictureConfigurator(int width, int height, Color color, float maxSize = 120, FontStyle fontStyle = FontStyle.Regular)
+        public PictureConfigurator(Result<int> width, Result<int> height, Result<Color> color, 
+                                    float maxSize = 120, FontStyle fontStyle = FontStyle.Regular)
         {
-            CheckCorrectArgumentConstructor(width, height,color);
-            Width = width;
-            Height = height;
-            Painter = new DefaultWordPainter(color, maxSize, fontStyle);
+            Width = width.Then(CheckCorrectArgumentWindowsSize);
+            Height = height.Then(CheckCorrectArgumentWindowsSize);
+            Painter = new DefaultWordPainter(color.Then(CheckColorIsEmpty).TryGetValue(), maxSize, fontStyle);
         }
 
         [AssertionMethod]
-        private static void CheckCorrectArgumentConstructor(int width, int height, Color color)
+        private static Result<int> CheckCorrectArgumentWindowsSize(int side)
         {
-            if (width <= 0 || height <= 0)
-                throw new ArgumentException("Width or height less zero");
-            if (color == null)
-                throw new ArgumentException("Color is null");
+            return side < 1 ? Result.Fail<int>("side less one") : side.AsResult();
         }
 
+        [AssertionMethod]
+        private static Result<Color> CheckColorIsEmpty(Color color)
+        {
+            return color.IsEmpty ? Result.Fail<Color>("Color is Empty") : color.AsResult();
+        }
         public PictureConfigurator SetWordPainter(IWordPainter painter)
         {
             Painter = painter;

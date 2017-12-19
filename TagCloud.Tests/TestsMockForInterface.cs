@@ -9,7 +9,6 @@ namespace TagCloud.Tests
     [TestFixture]
     class TestTagCloud
     {
-
         private Mock<IFormatReader> reader;
         private Mock<IWordFilter> wordFilter;
         private Mock<IPainter> painter;
@@ -37,8 +36,8 @@ namespace TagCloud.Tests
                 .Returns((string word) => word.Length > wordFilter.Object.MinLenght);
 
             painter = new Mock<IPainter>();
-            painter.Setup(p => p.Height).Returns(100);
-            painter.Setup(p => p.Width).Returns(100);
+            painter.Setup(p => p.Height.TryGetValue()).Returns(100);
+            painter.Setup(p => p.Width.TryGetValue()).Returns(100);
 
             tagCloudBuilder = new Mock<ITagCloudBuilder>();
             wordPainter = new Mock<IWordPainter>();

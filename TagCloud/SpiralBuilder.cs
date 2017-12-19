@@ -43,7 +43,7 @@ namespace TagCloud
         }
 
 
-        public Point GetLocationNextRectangle(Size rectangleSize)
+        public Result<Point> GetLocationNextRectangle(Size rectangleSize)
         {
 
             foreach (var spiralPoint in spiralPoints)
@@ -53,10 +53,10 @@ namespace TagCloud
                 if (IsCorrectLocation(rectangle))
                 {
                     builtRectangles.Add(rectangle);
-                    return rectangle.Location;
+                    return rectangle.Location.AsResult();
                 }
             }
-            throw new Exception("Cloud is full");
+            return Result.Fail<Point>("Tag cloud is full");
         }
 
 

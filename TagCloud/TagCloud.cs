@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Linq;
 
 namespace TagCloud
@@ -29,31 +28,29 @@ namespace TagCloud
             var words = reader.GetFileData(inputFile).TryGetValue()
                 .Where(word => contentConfigurator.IsWordValid(word.Text))
                 .OrderByDescending(w => w.Quantity)
-                .ToArray(); // note: use ToList only if you intend to add items
+                .ToArray().AsResult().Then(WordsSequenceIsEmpty);
+          
+            var maxQuantity = words.TryGetValue().First().Quantity;
+            var minQuantity = words.TryGetValue().Last().Quantity;
 
-            if (words.Length == 0)
-                throw  new ArgumentException("Not text, file is empty or not valid text");
-
-            var maxQuantity = words.First().Quantity;
-            var minQuantity = words.Last().Quantity;
-
-            var picture = new Bitmap(pictureConfigurator.Width, pictureConfigurator.Height);
+            var picture = new Bitmap(pictureConfigurator.Width.TryGetValue(), pictureConfigurator.Height.TryGetValue());
             using (var g = Graphics.FromImage(picture))
             {
-                foreach (var word in words)
+                foreach (var word in words.TryGetValue())
                 {
                     var fontForWord = GetFont(pictureConfigurator.Painter, maxQuantity,
                         minQuantity, word.Quantity, word.Text);
                     
                     var sizeOfWord = g.MeasureString(word.Text, fontForWord);
                     Point leftTopCorner;
-                    try
-                    {
-                        leftTopCorner = builder.GetLocationNextRectangle(Size.Round(sizeOfWord));
-                    }
-                    catch (Exception)
+                    
+                    var resultGetLocation = builder.GetLocationNextRectangle(Size.Round(sizeOfWord));
+                    if (resultGetLocation.IsSuccess)
+                        leftTopCorner = resultGetLocation.TryGetValue();
+                    else
                     {
                         break;
+                        
                     }
                      
                     var rectangle = new RectangleF(leftTopCorner, sizeOfWord);
@@ -70,6 +67,11 @@ namespace TagCloud
         {
             var fontSize = pictureConfiguratorPainter.GetFontSize(word, maxWeight, minWeight, weightWord) + 1;
             return pictureConfiguratorPainter.GetFontWord(word, fontSize);
+        }
+
+        private Result<Word[]> WordsSequenceIsEmpty(Word[] words)
+        {
+            return words.Length == 0 ? Result.Fail<Word[]>("Not text, file is empty or not valid text") : words.AsResult();
         }
     }
 }
