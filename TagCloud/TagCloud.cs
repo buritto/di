@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace TagCloud
@@ -25,42 +27,66 @@ namespace TagCloud
 
         public void PaintTagCloud(string inputFile, string pictureResultName)
         {
-            var words = reader.GetFileData(inputFile).TryGetValue()
-                .Where(word => contentConfigurator.IsWordValid(word.Text))
-                .OrderByDescending(w => w.Quantity)
-                .ToArray().AsResult().Then(WordsSequenceIsEmpty);
-          
-            var maxQuantity = words.TryGetValue().First().Quantity;
-            var minQuantity = words.TryGetValue().Last().Quantity;
 
+            reader.GetFileData(inputFile)
+                .Then(ChooseCorrectWords)
+                .Then(OrderByDescending)
+                .Then(WordsSequenceIsEmpty)
+                .Then(DrawWords)
+                .Then(bitmap => Save(bitmap, pictureResultName))
+                .EnsureSuccess();
+        }
+
+        private Result<Bitmap> Save(Bitmap picture, string fileName)
+        {
+            picture.Save(fileName);
+            return picture.AsResult();
+        }
+
+
+        private Result<Bitmap> DrawWords(Word[] words)
+        {
             var picture = new Bitmap(pictureConfigurator.Width.TryGetValue(), pictureConfigurator.Height.TryGetValue());
             using (var g = Graphics.FromImage(picture))
             {
-                foreach (var word in words.TryGetValue())
+                var maxQuantity = words.First().Quantity;
+                var minQuantity = words.Last().Quantity;
+                foreach (var word in words)
                 {
                     var fontForWord = GetFont(pictureConfigurator.Painter, maxQuantity,
                         minQuantity, word.Quantity, word.Text);
-                    
+
                     var sizeOfWord = g.MeasureString(word.Text, fontForWord);
                     Point leftTopCorner;
-                    
+
                     var resultGetLocation = builder.GetLocationNextRectangle(Size.Round(sizeOfWord));
                     if (resultGetLocation.IsSuccess)
                         leftTopCorner = resultGetLocation.TryGetValue();
                     else
                     {
                         break;
-                        
                     }
-                     
+
                     var rectangle = new RectangleF(leftTopCorner, sizeOfWord);
                     var colorForWord = pictureConfigurator.Painter.GetColorWord(word.Text);
 
                     using (var solidBrush = new SolidBrush(colorForWord))
                         g.DrawString(word.Text, fontForWord, solidBrush, rectangle);
                 }
-                picture.Save(pictureResultName);
+                
             }
+
+            return picture.AsResult();
+        }
+
+        private Result<Word[]> OrderByDescending(List<Word> words)
+        {
+            return words.OrderByDescending(w => w.Quantity).ToArray().AsResult();
+        }
+
+        private Result<List<Word>> ChooseCorrectWords(List<Word> words)
+        {
+            return words.Where(word => contentConfigurator.IsWordValid(word.Text)).ToList().AsResult();
         }
 
         public static Font GetFont(IWordPainter pictureConfiguratorPainter, float maxWeight, float minWeight, float weightWord, string word)

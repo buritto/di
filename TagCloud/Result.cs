@@ -56,5 +56,20 @@ namespace TagCloud
                 ? continuation(input.Value)
                 : Fail<TOutput>(input.ErrorMessage);
         }
+
+        public static Result<TOutput> Then<TInput, TOutput>(this Result<TInput> input,
+            Func<TInput, string, Result<TOutput>> continuation, string line)
+        {
+            return input.IsSuccess
+                ? continuation(input.Value, line)
+                : Fail<TOutput>(input.ErrorMessage);
+        }
+
+        public static Result<T> EnsureSuccess<T>(this Result<T> result)
+        {
+            if (!result.IsSuccess)
+                throw new Exception(result.ErrorMessage);
+            return result;
+        }
     }
 }

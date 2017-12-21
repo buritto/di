@@ -20,7 +20,7 @@ namespace TagCloud
         [AssertionMethod]
         private static Result<int> CheckCorrectArgumentWindowsSize(int side)
         {
-            return side < 1 ? Result.Fail<int>("side less one") : side.AsResult();
+            return side < 1 ? Result.Fail<int>("Lenght side of window be less one") : side.AsResult();
         }
 
         [AssertionMethod]
