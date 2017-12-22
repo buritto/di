@@ -27,7 +27,8 @@ namespace TagCloud
             using (container.BeginLifetimeScope())
             {
                 var component = container.Resolve<TagCloud>();
-                component.PaintTagCloud(textFileName, fileNameWithPicture);
+                var picture = component.PaintTagCloud(textFileName, fileNameWithPicture);
+                picture.EnsureSuccess();
             }
         }
 

@@ -9,21 +9,6 @@ namespace TagCloud
     {
         private const string formatFile = ".txt";
 
-        private Result<IEnumerable<string>> RemoveSpaces(IEnumerable<string> data)
-        {
-            return data.SelectMany(words => words.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries)).AsResult();
-        }
-
-        private Result<IEnumerable<string>> RemovePunctuationMarks(IEnumerable<string> data)
-        {
-            return data.Select(w => w.TrimEnd(',', '.', '?', '!')).AsResult();
-        }
-
-        private Result<IEnumerable<IGrouping<string, string>>> Group(IEnumerable<string> data)
-        {
-            return data.GroupBy(w => w).AsResult();
-        }
-
         private Result<List<Word>> CreateListPairs(IEnumerable<IGrouping<string, string>> data)
         {
             return data.Select(g => new Word
@@ -44,12 +29,17 @@ namespace TagCloud
             return File.ReadAllLines(fileName).AsEnumerable().AsResult();
         }
 
+        private Result<IEnumerable<IGrouping<string, string>>> DeleteNotWords(IEnumerable<string> data)
+        {
+            return data.SelectMany(words => words.Split(new[] {" "}, StringSplitOptions.RemoveEmptyEntries))
+                .Select(w => w.TrimEnd(',', '.', '?', '!'))
+                .GroupBy(w => w).AsResult();
+        }
+
         public Result<List<Word>> GetFileData(string fileName)
         {
             return ReadDataFromFile(fileName)
-                .Then(RemoveSpaces)
-                .Then(RemovePunctuationMarks)
-                .Then(Group)
+                .Then(DeleteNotWords)
                 .Then(CreateListPairs);
         }
     }

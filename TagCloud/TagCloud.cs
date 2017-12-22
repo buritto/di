@@ -25,16 +25,15 @@ namespace TagCloud
             this.builder = builder;
         }
 
-        public void PaintTagCloud(string inputFile, string pictureResultName)
+        public Result<Bitmap> PaintTagCloud(string inputFile, string pictureResultName)
         {
 
-            reader.GetFileData(inputFile)
+            return reader.GetFileData(inputFile)
                 .Then(ChooseCorrectWords)
                 .Then(OrderByDescending)
                 .Then(WordsSequenceIsEmpty)
                 .Then(DrawWords)
-                .Then(bitmap => Save(bitmap, pictureResultName))
-                .EnsureSuccess();
+                .Then(bitmap => Save(bitmap, pictureResultName));
         }
 
         private Result<Bitmap> Save(Bitmap picture, string fileName)
