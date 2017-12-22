@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Drawing;
 using Autofac;
-using DocoptNet;
 
 namespace TagCloud
 {
-
     public static class Program
     {
         private static IContainer CreateContainer(Options options)
@@ -16,7 +14,7 @@ namespace TagCloud
             {
                 IWordFilter config = new ContentConfigurator();
                 config = config.SetMinCountSymbolInWord(options.Count);
-                return (ContentConfigurator)config;
+                return (ContentConfigurator) config;
             }).As<IWordFilter>();
             builder.Register(c => new PictureConfigurator(options.Width, options.Height,
                 options.Color, options.MaxSizeWord, options.FontStyle)).As<IPainter>();
@@ -24,12 +22,10 @@ namespace TagCloud
             builder.Register(c => new SpiralBuilder(centerWindow, options.Width, options.Height))
                 .As<ITagCloudBuilder>();
             builder.RegisterType<TagCloud>();
-             return builder.Build();
+            return builder.Build();
         }
 
-        
-
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             try
             {
@@ -38,7 +34,6 @@ namespace TagCloud
                     .Resolve<TagCloud>()
                     .PaintTagCloud(options.TextFileName, options.FileNameWithPicture)
                     .EnsureSuccess();
-
             }
             catch (Exception e)
             {
