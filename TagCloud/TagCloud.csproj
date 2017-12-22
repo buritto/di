@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="IWordFilter.cs" />
     <Compile Include="IPainter.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="SpiralBuilder.cs" />
     <Compile Include="ContentConfigurator.cs" />
